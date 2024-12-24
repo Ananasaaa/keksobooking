@@ -12,6 +12,8 @@ export const MAX_ROOMS = 5;
 export const MIN_GUESTS = 1;
 export const MAX_GUESTS = 10;
 
+export const MAX_CARDS = 10;
+
 export const TYPES = ['palace', 'flat', 'house', 'bungalow'];
 export const CHECK_TIMES = ['12:00', '13:00', '14:00'];
 export const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
