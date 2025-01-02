@@ -13,14 +13,5 @@ renderOfferCard(mockData[0], mapCanvas);
   renderOfferCard(offer, mapCanvas)
 });*/
 
-document.addEventListener('DOMContentLoaded', () => {
-  const typeSelect = document.querySelector('#type');
-  const priceInput = document.querySelector('#price');
-  const timeInSelect = document.querySelector('#timein');
-  const timeOutSelect = document.querySelector('#timeout');
-  const roomSelect = document.querySelector('#room_number');
-  const capacitySelect = document.querySelector('#capacity');
-  
-  initFormLogic({ typeSelect, priceInput, timeInSelect, timeOutSelect,  roomSelect, capacitySelect  });
-});
+initFormLogic();
 
