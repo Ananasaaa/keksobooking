@@ -1,6 +1,6 @@
 import { generateMockData } from './data.js';
 import { renderOfferCard } from './offerCard.js';
-
+import { initFormLogic } from './formHandler.js';
 
 console.log('FFFFFFFFFFFF', generateMockData()); 
 
@@ -13,4 +13,5 @@ renderOfferCard(mockData[0], mapCanvas);
   renderOfferCard(offer, mapCanvas)
 });*/
 
+initFormLogic();
 
