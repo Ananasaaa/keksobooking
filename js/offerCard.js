@@ -61,3 +61,4 @@ export const renderOfferCard = (offerData/*, container*/) => {
   //container.appendChild(card);
   return card
 };
+
