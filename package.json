@@ -2,18 +2,19 @@
   "name": "project",
   "version": "22.0.0",
   "private": true,
+  "type": "commonjs",
   "description": "Личный проект",
-
-
   "devDependencies": {
-    "browser-sync": "2.26.14",
+    "browser-sync": "^3.0.3",
     "eslint": "7.18.0",
     "eslint-config-htmlacademy": "2.0.0"
   },
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "leaflet": "^1.9.4"
+  },
   "scripts": {
-    "start": "browser-sync start --server --no-ui --files \"js/**/*.js\"",
+    "start": "browser-sync start --server --no-ui --files \"js/**/*.js, index.html, css/**/*.css, leaflet/**/*.css\"",
     "test": "eslint js/"
   },
   "engines": {

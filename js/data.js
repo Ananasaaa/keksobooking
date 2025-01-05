@@ -24,7 +24,7 @@ export const generateMockData = () => {
       y: getRandomFloat(MIN_Y, MAX_Y),
     }; //генерация рандомной локации 
 
-    const randomAvatarIndex = getRandomInt(1, 10); //рандомные аватарки
+    const randomAvatarIndex = getRandomInt(1, 8); //рандомные аватарки
 
     return {
       author: {
