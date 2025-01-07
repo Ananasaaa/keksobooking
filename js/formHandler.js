@@ -47,7 +47,7 @@ const updateCapacityOptions = (roomSelect, capacitySelect) => {
   validOptions.forEach(value => {
     const option = capacitySelect.querySelector(`option[value="${value}"]`);
     if (option) {
-      option.disabled = false;
+      option.disabled = false
     }
   });
 
@@ -63,16 +63,55 @@ export const initFormLogic = () => {
   const timeOutSelect = document.querySelector('#timeout');
   const roomSelect = document.querySelector('#room_number');
   const capacitySelect = document.querySelector('#capacity');
+  const form = document.querySelector('.ad-form');
+  const titleInput = document.querySelector('#title');
+  const addressInput = document.querySelector('#address');
+
+
+  titleInput.required = true;
+  priceInput.required = true;
+  roomSelect.required = true;
+  capacitySelect.required = true;
+  addressInput.required = true;
 
   typeSelect.addEventListener('change', () => updatePriceField(typeSelect, priceInput));
   priceInput.addEventListener('input', () => validatePrice(priceInput));
   timeInSelect.addEventListener('change', () => syncTimeFields(timeInSelect, timeOutSelect));
   timeOutSelect.addEventListener('change', () => syncTimeFields(timeOutSelect, timeInSelect));
   roomSelect.addEventListener('change', () => updateCapacityOptions(roomSelect, capacitySelect));
+  titleInput.addEventListener('input', () => {
+    const invalidCharacters = /[^a-zA-Zа-яА-ЯёЁ\s]/g; 
+    if (invalidCharacters.test(titleInput.value)) {
+      titleInput.setCustomValidity('Пожалуйста, используйте только буквы и пробелы.');
+    } else {
+      titleInput.setCustomValidity('');
+    }
+    titleInput.reportValidity();
+  });
 
   updatePriceField(typeSelect, priceInput);
   updateCapacityOptions(roomSelect, capacitySelect);
+
+  //отправка формы
+  form.addEventListener('submit', (event) => {
+    event.preventDefault(); 
+  
+    const formData = new FormData(form);
+  
+    console.log('Собранные данные:', Object.fromEntries(formData));
+
+
+    fetch('https://example.com/endpoint', {
+      method: 'POST',
+      body: formData,
+      mode: 'no-cors',
+    })
+      .then(() => {
+        console.log('Запрос отправлен'); 
+      })
+      .catch((error) => {
+        console.error('Ошибка при отправке:', error); 
+      });
+  });
 };
-
-
 
