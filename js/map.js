@@ -39,6 +39,11 @@ export const initMap = (data) => {
 
   const addressField = document.querySelector('#address');
 
+  const mainMarkerPosition = mainMarker.getLatLng();
+  const initialLat = mainMarkerPosition.lat.toFixed(5);
+  const initialLng = mainMarkerPosition.lng.toFixed(5);
+  addressField.value = `${initialLat}, ${initialLng}`; 
+
   mainMarker.on('moveend', function (event) {
     const position = event.target.getLatLng();
     const lat = position.lat.toFixed(5);
@@ -95,6 +100,7 @@ const enablePage = () => {
   enableFields(adForm.querySelectorAll('input, select, textarea, button'));
   enableFields(mapFilters.querySelectorAll('input, select'));
 };
+
 
 
 
