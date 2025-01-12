@@ -98,9 +98,6 @@ export const initFormLogic = () => {
   
     const formData = new FormData(form);
   
-    console.log('Собранные данные:', Object.fromEntries(formData));
-
-
     fetch('https://example.com/endpoint', {
       method: 'POST',
       body: formData,
