@@ -15,6 +15,23 @@ const disablePage = () => {
   disableFields(mapFilters.querySelectorAll('input, select'));
 };
 
+const enablePage = () => {
+  const adForm = document.querySelector('.ad-form');
+  const mapFilters = document.querySelector('.map__filters');
+
+  adForm.classList.remove('ad-form--disabled');
+  mapFilters.classList.remove('map__filters--disabled');
+
+  const enableFields = (fields) => {
+    fields.forEach((field) => {
+      field.disabled = false;
+    });
+  };
+
+  enableFields(adForm.querySelectorAll('input, select, textarea, button'));
+  enableFields(mapFilters.querySelectorAll('input, select'));
+};
+
 export const initMap = (data) => {
  
   disablePage();
@@ -59,7 +76,7 @@ export const initMap = (data) => {
     iconAnchor: [20, 40],
   });
 
-  data.forEach(function(ad) {
+  data.slice(0, 10).forEach(function(ad) {
     const adMarker = L.marker([ad.location.x, ad.location.y], { icon: adIcon })
     adMarker.addTo(map)
       .bindPopup(`
@@ -82,38 +99,66 @@ export const initMap = (data) => {
       `)
   }); 
   map.whenReady(enablePage);
-};
-
-const enablePage = () => {
-  const adForm = document.querySelector('.ad-form');
+ 
+  const housingType = document.querySelector('#housing-type');
   const mapFilters = document.querySelector('.map__filters');
 
-  adForm.classList.remove('ad-form--disabled');
-  mapFilters.classList.remove('map__filters--disabled');
+  const filterOffers = () => {
+    const selectedType = housingType.value;
+    const selectedPrice = document.querySelector('#housing-price').value;
+    const selectedRooms = document.querySelector('#housing-rooms').value;
+    const selectedGuests = document.querySelector('#housing-guests').value;
 
-  const enableFields = (fields) => {
-    fields.forEach((field) => {
-      field.disabled = false;
+    const selectedFeatures = Array.from(
+      document.querySelectorAll('#housing-features input:checked'),
+    ).map((feature) => feature.value);
+
+    const filteredData = data.filter((ad) => {
+      if (selectedType !== 'any' && ad.offer.type !== selectedType) return false;
+
+      if (selectedPrice === 'low' && ad.offer.price >= 10000) return false;
+      if (selectedPrice === 'middle' && (ad.offer.price < 10000 || ad.offer.price > 50000)) return false;
+      if (selectedPrice === 'high' && ad.offer.price <= 50000) return false;
+
+      if (selectedRooms !== 'any' && ad.offer.rooms !== Number(selectedRooms)) return false;
+      if (selectedGuests !== 'any' && ad.offer.guests !== Number(selectedGuests)) return false;
+
+      return selectedFeatures.every((feature) => ad.offer.features.includes(feature));
+    });
+
+    map.eachLayer((layer) => {
+      if (layer instanceof L.Marker && layer !== mainMarker) {
+        map.removeLayer(layer);
+      }
+    });
+
+    filteredData.slice(0, 10).forEach((ad) => {
+      L.marker([ad.location.x, ad.location.y], { icon: adIcon })
+        .addTo(map)
+        .bindPopup(`
+          <img src="${ad.author.avatar}">
+      <strong>${ad.offer.title}</strong>
+      <br>${ad.offer.address}<br>
+      <em>${ad.offer.price} ₽/ночь</em>
+      <p>Тип жилья: ${ad.offer.type} </p>
+      <p>Количество комнат: ${ad.offer.rooms}</p> 
+      <p>Количество гостей: ${ad.offer.guests}</p>  
+      <p>Время заезда: ${ad.offer.checkin}</p> 
+      <p>Время выезда: ${ad.offer.checkout}</p> 
+      <p>Удобства: 
+          <ul style="list-style: none; padding: 0;">
+      ${ad.offer.features.map(feature => `<li class="popup__feature popup__feature--${feature}"></li>`).join(' ')}
+    </ul>
+      </p> 
+      <p>${ad.offer.description}</p> 
+          ${ad.offer.photos.map(photo => `<img src="${photo}" alt="Фото жилья" width="50" height="40">`).join(' ')}
+          `);
     });
   };
 
-  enableFields(adForm.querySelectorAll('input, select, textarea, button'));
-  enableFields(mapFilters.querySelectorAll('input, select'));
+  mapFilters.addEventListener('change', filterOffers);
+
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

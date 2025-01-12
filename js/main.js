@@ -8,9 +8,6 @@ const mapCanvas = document.querySelector('#map-canvas');
 
 renderOfferCard(mockData[0], mapCanvas);  
 
-/*mockData.forEach(offer => {
-  renderOfferCard(offer, mapCanvas)
-});*/
 initFormLogic();
 
 initMap(mockData);
