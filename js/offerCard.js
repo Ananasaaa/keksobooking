@@ -5,7 +5,7 @@ const offerTypeMapping = {
   palace: 'Дворец',
 };
   
-export const renderOfferCard = (offerData/*, container*/) => {
+export const renderOfferCard = (offerData, container) => {
   const template = document.querySelector('#card').content.querySelector('.popup');
   const card = template.cloneNode(true);
 
@@ -58,7 +58,7 @@ export const renderOfferCard = (offerData/*, container*/) => {
   const avatar = card.querySelector('.popup__avatar');
   avatar.src = offerData.author.avatar;
 
-  //container.appendChild(card);
+  container.appendChild(card);
   return card
 };
 
