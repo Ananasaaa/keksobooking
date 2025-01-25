@@ -59,6 +59,4 @@ export const renderOfferCard = (offerData, container) => {
   avatar.src = offerData.author.avatar;
 
   container.appendChild(card);
-  return card
-};
-
+}; 

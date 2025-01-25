@@ -1,13 +1,18 @@
-import { generateMockData } from './data.js';
-import { renderOfferCard } from './offerCard.js';
 import { initFormLogic } from './formHandler.js';
 import { initMap } from './map.js';
+import { fetchOffers, sendFormData } from './api.js';
 
-const mockData = generateMockData();
-const mapCanvas = document.querySelector('#map-canvas');
-
-renderOfferCard(mockData[0], mapCanvas);  
-
-initFormLogic();
-
-initMap(mockData);
+//task9
+const initApp = async () => {
+  try {
+    const mockData = await fetchOffers();
+    initMap(mockData); 
+  } catch (error) {
+    console.error('Failed to load data for the map:', error);
+    alert('Failed to load data. Please try again later.');
+  }
+  
+  initFormLogic(sendFormData); 
+};
+  
+initApp();

@@ -24,7 +24,7 @@ const validatePrice = (priceInput) => {
   const minValue = Number(priceInput.min);
 
   if (currentValue < minValue) {
-    priceInput.setCustomValidity(`Минимальная цена для этого типа жилья — ${minValue} ₽`);
+    priceInput.setCustomValidity(`The minimum price for this type of accommodation is — ${minValue} ₽`);
   } else {
     priceInput.setCustomValidity('');
   }
@@ -56,7 +56,51 @@ const updateCapacityOptions = (roomSelect, capacitySelect) => {
   }
 };
 
-export const initFormLogic = () => {
+//task9
+
+const initPhotoUpload = () => {
+  const avatarInput = document.querySelector('#avatar');
+  const avatarPreview = document.querySelector('.ad-form-header__preview img'); 
+  const imagesInput = document.querySelector('#images');
+  const photoContainer = document.querySelector('.ad-form__photo');
+
+  avatarInput.addEventListener('change', () => {
+    const file = avatarInput.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        avatarPreview.src = reader.result; 
+      };
+      reader.readAsDataURL(file);
+    } else {
+      alert('Выберите корректное изображение для аватара.');
+    }
+  });
+
+  imagesInput.addEventListener('change', () => {
+    const files = Array.from(imagesInput.files);
+    photoContainer.innerHTML = ''; 
+
+    files.forEach((file) => {
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = document.createElement('img');
+          img.src = reader.result;
+          img.style.width = '70px';
+          img.style.height = '70px';
+          img.alt = 'Фото жилья';
+          photoContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert('Все файлы должны быть изображениями.');
+      }
+    });
+  });
+};
+//
+export const initFormLogic = (sendDataCb) => {
   const typeSelect = document.querySelector('#type');
   const priceInput = document.querySelector('#price');
   const timeInSelect = document.querySelector('#timein');
@@ -66,6 +110,7 @@ export const initFormLogic = () => {
   const form = document.querySelector('.ad-form');
   const titleInput = document.querySelector('#title');
   const addressInput = document.querySelector('#address');
+  const resetBtn = document.querySelector('.ad-form__reset');
 
 
   titleInput.required = true;
@@ -82,7 +127,7 @@ export const initFormLogic = () => {
   titleInput.addEventListener('input', () => {
     const invalidCharacters = /[^a-zA-Zа-яА-ЯёЁ\s]/g; 
     if (invalidCharacters.test(titleInput.value)) {
-      titleInput.setCustomValidity('Пожалуйста, используйте только буквы и пробелы.');
+      titleInput.setCustomValidity('Please use only letters and spaces.');
     } else {
       titleInput.setCustomValidity('');
     }
@@ -91,27 +136,31 @@ export const initFormLogic = () => {
 
   updatePriceField(typeSelect, priceInput);
   updateCapacityOptions(roomSelect, capacitySelect);
-
-  //отправка формы
-  form.addEventListener('submit', (event) => {
-    event.preventDefault(); 
+  initPhotoUpload();
   
+
+  //task9
+ 
+  const resetForm = () => {
+    form.reset();
+    updatePriceField(typeSelect, priceInput);
+    updateCapacityOptions(roomSelect, capacitySelect);
+  };
+  
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
     const formData = new FormData(form);
   
-    console.log('Собранные данные:', Object.fromEntries(formData));
-
-
-    fetch('https://example.com/endpoint', {
-      method: 'POST',
-      body: formData,
-      mode: 'no-cors',
-    })
+    sendDataCb(formData)
       .then(() => {
-        console.log('Запрос отправлен'); 
+        alert('Form submitted successfully');
+        resetForm();
       })
-      .catch((error) => {
-        console.error('Ошибка при отправке:', error); 
+      .catch(() => {
+        alert('Error occurred while submitting the form');
       });
   });
+  
+  resetBtn.addEventListener('click', resetForm);
+  
 };
-
