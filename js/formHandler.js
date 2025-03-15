@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const typeMinPrice = {
   bungalow: 0,
   flat: 1000,
@@ -156,7 +157,8 @@ export const initFormLogic = (sendDataCb) => {
         alert('Form submitted successfully');
         resetForm();
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log(e.message);
         alert('Error occurred while submitting the form');
       });
   });
