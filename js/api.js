@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const url = 'http://localhost:3004';
 
 export const fetchOffers = async () => {
@@ -28,12 +29,12 @@ export const sendFormData = async (formData) => {
     });
 
     if (!response.ok) {
-      throw new Error(`Ошибка отправки данных: ${response.status}`);
+      throw new Error(`Error sending data: ${response.status}`);
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Ошибка отправки данных:', error);
+    console.error('Error sending data:', error);
     throw error;
   }
 };
